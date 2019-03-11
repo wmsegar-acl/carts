@@ -1,9 +1,14 @@
 ---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: lab-dev
+---
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
   name: carts
-  namespace: dev
+  namespace: lab-dev
 spec:
   replicas: 1
   template:
@@ -14,7 +19,7 @@ spec:
     spec:
       containers:
       - name: carts
-        image: dynatracesockshop/carts:0.6.0
+        image: 10.27.249.194:5000/library/sockshop/carts-0.6.0-1
         env:
         - name: JAVA_OPTS
           value: -Xms128m -Xmx512m -XX:PermSize=128m -XX:MaxPermSize=128m -XX:+UseG1GC -Djava.security.egd=file:/dev/urandom
@@ -57,7 +62,7 @@ metadata:
   name: carts
   labels:
     app: carts
-  namespace: dev
+  namespace: lab-dev
 spec:
   ports:
   - name: http
