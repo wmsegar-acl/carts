@@ -63,6 +63,13 @@ pipeline {
           return env.BRANCH_NAME ==~ 'release/.*' || env.BRANCH_NAME ==~'master'
         }
       }
+      steps {
+        container('kubectl') {
+          sh "sed -i 's#image: .*#image: ${env.TAG_DEV}#' manifest/carts.yml"
+          sh "kubectl -n dev apply -f manifest/carts.yml"
+        }
+      }
+    }
     stage('DT Deploy Event') {
       when {
         expression {
@@ -80,13 +87,6 @@ pipeline {
               ]
             )
           }
-        }
-      }
-    }
-      steps {
-        container('kubectl') {
-          sh "sed -i 's#image: .*#image: ${env.TAG_DEV}#' manifest/carts.yml"
-          sh "kubectl -n dev apply -f manifest/carts.yml"
         }
       }
     }
